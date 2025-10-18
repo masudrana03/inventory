@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('total_amount', 10, 2);
             $table->text('notes')->nullable();
             $table->string('invoice_path')->nullable();
+            $table->decimal('discount_amount', 10, 2)->default(0.00);
+            $table->decimal('discount_percentage', 5, 2)->nullable();
             $table->timestamps();
         });
     }

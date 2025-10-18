@@ -44,7 +44,7 @@ class SaleForm
                             ->default(now()),
                     ]),
 
-                Grid::make(2)
+                Grid::make(3)
                     ->schema([
                         TextInput::make('reference_no')
                             ->label('Reference Number')
@@ -60,6 +60,56 @@ class SaleForm
                             ->step(0.01)
                             ->disabled()
                             ->dehydrated()
+                            ->default(0.00),
+
+                        TextInput::make('discount_amount')
+                            ->label('Discount Amount')
+                            ->numeric()
+                            ->prefix('$')
+                            ->step(0.01)
+                            ->default(0.00)
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                $totalAmount = (float) $get('total_amount');
+                                $discountAmount = (float) $state;
+                                if ($totalAmount > 0) {
+                                    $percentage = ($discountAmount / $totalAmount) * 100;
+                                    $set('discount_percentage', round($percentage, 2));
+                                }
+                                // Update final amount
+                                $finalAmount = $totalAmount - $discountAmount;
+                                $set('final_amount', $finalAmount);
+                            }),
+                    ]),
+
+                Grid::make(2)
+                    ->schema([
+                        TextInput::make('discount_percentage')
+                            ->label('Discount Percentage')
+                            ->numeric()
+                            ->suffix('%')
+                            ->step(0.01)
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                $totalAmount = (float) $get('total_amount');
+                                $percentage = (float) $state;
+                                $discountAmount = 0;
+                                if ($totalAmount > 0) {
+                                    $discountAmount = ($percentage / 100) * $totalAmount;
+                                    $set('discount_amount', round($discountAmount, 2));
+                                }
+                                // Update final amount
+                                $finalAmount = $totalAmount - $discountAmount;
+                                $set('final_amount', $finalAmount);
+                            }),
+
+                        TextInput::make('final_amount')
+                            ->label('Final Amount')
+                            ->numeric()
+                            ->prefix('$')
+                            ->step(0.01)
+                            ->disabled()
+                            ->dehydrated(false)
                             ->default(0.00),
                     ]),
 

@@ -16,12 +16,15 @@ class Sale extends Model
         'sale_date',
         'reference_no',
         'total_amount',
+        'discount_amount',
+        'discount_percentage',
         'notes',
         'invoice_path',
     ];
 
     protected $attributes = [
         'total_amount' => 0.00,
+        'discount_amount' => 0.00,
     ];
 
     protected function casts(): array
@@ -29,6 +32,8 @@ class Sale extends Model
         return [
             'sale_date' => 'date',
             'total_amount' => 'decimal:2',
+            'discount_amount' => 'decimal:2',
+            'discount_percentage' => 'decimal:2',
         ];
     }
 
@@ -40,5 +45,37 @@ class Sale extends Model
     public function saleItems(): HasMany
     {
         return $this->hasMany(SaleItem::class);
+    }
+
+    /**
+     * Calculate the final amount after discount
+     */
+    public function getFinalAmountAttribute(): float
+    {
+        return $this->total_amount - $this->discount_amount;
+    }
+
+    /**
+     * Calculate the total profit for this sale
+     */
+    public function getTotalProfitAttribute(): float
+    {
+        $totalProfit = 0;
+        foreach ($this->saleItems as $item) {
+            $profit = ($item->unit_price - $item->product->purchase_price) * $item->quantity;
+            $totalProfit += $profit;
+        }
+        return $totalProfit;
+    }
+
+    /**
+     * Calculate profit percentage
+     */
+    public function getProfitPercentageAttribute(): float
+    {
+        if ($this->total_amount == 0) {
+            return 0;
+        }
+        return ($this->total_profit / $this->total_amount) * 100;
     }
 }

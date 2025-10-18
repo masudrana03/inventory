@@ -2,14 +2,15 @@
 
 namespace App\Providers;
 
-use App\Models\Purchase;
-use App\Models\PurchaseItem;
 use App\Models\Sale;
+use App\Models\Purchase;
 use App\Models\SaleItem;
-use App\Observers\PurchaseObserver;
-use App\Observers\PurchaseItemObserver;
+use App\Models\PurchaseItem;
 use App\Observers\SaleObserver;
+use App\Observers\PurchaseObserver;
 use App\Observers\SaleItemObserver;
+use Illuminate\Support\Facades\URL;
+use App\Observers\PurchaseItemObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,5 +32,7 @@ class AppServiceProvider extends ServiceProvider
         Sale::observe(SaleObserver::class);
         SaleItem::observe(SaleItemObserver::class);
         PurchaseItem::observe(PurchaseItemObserver::class);
+
+        URL::forceScheme('https');
     }
 }

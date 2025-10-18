@@ -39,6 +39,32 @@ class SalesTable
                     ->money('USD')
                     ->sortable(),
 
+                TextColumn::make('discount_amount')
+                    ->label('Discount')
+                    ->money('USD')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('final_amount')
+                    ->label('Final Amount')
+                    ->getStateUsing(fn ($record) => $record->final_amount)
+                    ->money('USD')
+                    ->sortable(),
+
+                TextColumn::make('total_profit')
+                    ->label('Profit')
+                    ->getStateUsing(fn ($record) => $record->total_profit)
+                    ->money('USD')
+                    ->sortable()
+                    ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
+
+                TextColumn::make('profit_percentage')
+                    ->label('Profit %')
+                    ->getStateUsing(fn ($record) => $record->profit_percentage)
+                    ->formatStateUsing(fn ($state) => number_format($state, 2) . '%')
+                    ->sortable()
+                    ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
+
                 TextColumn::make('saleItems_count')
                     ->label('Items')
                     ->getStateUsing(fn ($record) => $record->saleItems()->count())

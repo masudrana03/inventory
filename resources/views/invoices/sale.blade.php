@@ -162,6 +162,12 @@
                 <td class="label">Subtotal:</td>
                 <td class="amount">${{ number_format($sale->saleItems->sum('subtotal'), 2) }}</td>
             </tr>
+            @if($sale->discount_amount > 0)
+                <tr>
+                    <td class="label">Discount ({{ number_format($sale->discount_percentage ?? 0, 2) }}%):</td>
+                    <td class="amount">-${{ number_format($sale->discount_amount, 2) }}</td>
+                </tr>
+            @endif
             <tr>
                 <td class="label">Tax (0%):</td>
                 <td class="amount">$0.00</td>
@@ -170,6 +176,12 @@
                 <td class="label">Total:</td>
                 <td class="amount">${{ number_format($sale->total_amount, 2) }}</td>
             </tr>
+            @if($sale->discount_amount > 0)
+                <tr class="final-row">
+                    <td class="label">Final Amount:</td>
+                    <td class="amount">${{ number_format($sale->final_amount, 2) }}</td>
+                </tr>
+            @endif
         </table>
     </div>
 
