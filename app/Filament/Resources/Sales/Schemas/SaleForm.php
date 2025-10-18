@@ -59,7 +59,8 @@ class SaleForm
                             ->prefix('$')
                             ->step(0.01)
                             ->disabled()
-                            ->dehydrated(),
+                            ->dehydrated()
+                            ->default(0.00),
                     ]),
 
                 Textarea::make('notes')

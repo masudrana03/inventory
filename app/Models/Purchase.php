@@ -20,6 +20,10 @@ class Purchase extends Model
         'invoice_path',
     ];
 
+    protected $attributes = [
+        'total_amount' => 0.00,
+    ];
+
     protected function casts(): array
     {
         return [

@@ -41,7 +41,7 @@ class SalesTable
 
                 TextColumn::make('saleItems_count')
                     ->label('Items')
-                    ->counts('saleItems')
+                    ->getStateUsing(fn ($record) => $record->saleItems()->count())
                     ->sortable(),
 
                 TextColumn::make('created_at')

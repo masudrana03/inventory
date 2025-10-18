@@ -41,7 +41,7 @@ class PurchasesTable
 
                 TextColumn::make('purchaseItems_count')
                     ->label('Items')
-                    ->counts('purchaseItems')
+                    ->getStateUsing(fn ($record) => $record->purchaseItems()->count())
                     ->sortable(),
 
                 TextColumn::make('invoice_path')

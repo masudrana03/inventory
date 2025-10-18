@@ -60,7 +60,8 @@ class PurchaseForm
                             ->prefix('$')
                             ->step(0.01)
                             ->disabled()
-                            ->dehydrated(),
+                            ->dehydrated()
+                            ->default(0.00),
                     ]),
 
                 FileUpload::make('invoice_path')

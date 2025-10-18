@@ -30,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
         Purchase::observe(PurchaseObserver::class);
         Sale::observe(SaleObserver::class);
         SaleItem::observe(SaleItemObserver::class);
+        PurchaseItem::observe(PurchaseItemObserver::class);
     }
 }
